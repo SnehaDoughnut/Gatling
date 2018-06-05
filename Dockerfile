@@ -1,11 +1,21 @@
-FROM ubuntu:16.04
+FROM openjdk:8-jdk
 ENV GATLING_HOME /opt/gatling
 ENV GATLING_VERSION 2.3.1
-ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN apt-get update \
-  && apt-get install -y openjdk-8-jre wget 
+  && apt-get install -y wget unzip
+
 RUN  mkdir -p /opt/gatling
-WORKDIR /opt/gatling
-RUN wget -O gatling-$GATLING_VERSION.zip https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/2.3.1/gatling-charts-highcharts-bundle-2.3.1-bundle.zip
-RUN unzip gatling-$GATLING_VERSION.zip
+
+RUN mkdir -p /tmp/downloads && \
+    wget -q -O /tmp/downloads/gatling-$GATLING_VERSION.zip \
+    https://repo1.maven.org/maven2/io/gatling/highcharts/gatling-charts-highcharts-bundle/$GATLING_VERSION/gatling-charts-highcharts-bundle-$GATLING_VERSION-bundle.zip && \
+    mkdir -p /tmp/archive && cd /tmp/archive && \
+    unzip /tmp/downloads/gatling-$GATLING_VERSION.zip && \
+    mv /tmp/archive/gatling-charts-highcharts-bundle-$GATLING_VERSION/* /opt/gatling/ && \
+    rm -rf /tmp/*
+
+WORKDIR  /opt/gatling
+
+ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+EXPOSE 8000
 ENTRYPOINT ["gatling.sh"]

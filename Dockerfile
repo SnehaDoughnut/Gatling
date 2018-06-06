@@ -2,7 +2,7 @@ FROM openjdk:8-jdk
 ENV GATLING_HOME /opt/gatling
 ENV GATLING_VERSION 2.3.1
 RUN apt-get update \
-  && apt-get install -y wget unzip
+  && apt-get install -y wget unzip vim
 
 RUN  mkdir -p /opt/gatling
 

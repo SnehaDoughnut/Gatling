@@ -21,7 +21,9 @@ RUN mkdir -p /tmp/downloads && \
 
 
 WORKDIR  /opt/gatling
+COPY entrypoint.sh ./bin/
+RUN chmod +x ./bin/entrypoint.sh
 
 ENV PATH /opt/gatling/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 EXPOSE 8000
-ENTRYPOINT ["gatling.sh"]
+ENTRYPOINT ["entrypoint.sh"]
